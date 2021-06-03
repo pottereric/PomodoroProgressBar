@@ -13,23 +13,23 @@ namespace PomodoroProgressBar
 {
     public partial class Form1 : Form
     {
+        private const int TIMER_INTERVAL = 10_000;
+        private const int TIMER_INTERVAL_IN_TICKS = 10_000 * (int)TimeSpan.TicksPerMillisecond;
+        private const long WORK_INTERVAL = 25 * TimeSpan.TicksPerMinute;
+        private const long NONWARNING_WORK_INTERVAL = 20 * TimeSpan.TicksPerMinute;
+
+        private long _startTime;
+        private Timer _pomodoroTimer = new Timer();
+        private long _progress = 0;
+        private TaskbarProgressBarState _state = TaskbarProgressBarState.NoProgress;
+        private int _completed = 0;
+
         public Form1()
         {
             InitializeComponent();
             _pomodoroTimer.Interval = TIMER_INTERVAL;
             _pomodoroTimer.Tick += _pomodoroTimer_Tick;
         }
-
-
-        private const int TIMER_INTERVAL = 10_000;
-        private const int TIMER_INTERVAL_IN_TICKS = 10_000 * (int)TimeSpan.TicksPerMillisecond;
-        private const long WORK_INTERVAL = 25 * TimeSpan.TicksPerMinute;
-        private const long NONWARNING_WORK_INTERVAL = 20 * TimeSpan.TicksPerMinute;
-        private long _startTime;
-        private Timer _pomodoroTimer = new Timer();
-        public long Progress { get; set; } = 0;
-        public TaskbarProgressBarState State { get; set; } = TaskbarProgressBarState.NoProgress;
-        private int _completed = 0;
 
         private void _pomodoroTimer_Tick(object sender, EventArgs e)
         {
@@ -38,49 +38,67 @@ namespace PomodoroProgressBar
 
             if(elapsedTime >= WORK_INTERVAL)
             {
-                State = TaskbarProgressBarState.Error;
-                _pomodoroTimer.Stop();
-                _completed++;
-                lblCompletedCount.Text = _completed.ToString();
-                lblStatusText.Text = "Finished";
+                CompletePomodoro();
             }
             else if (elapsedTime >= NONWARNING_WORK_INTERVAL)
             {
-                State = TaskbarProgressBarState.Paused;
+                _state = TaskbarProgressBarState.Paused;
             }
             else
             {
-                State = TaskbarProgressBarState.Normal;
+                _state = TaskbarProgressBarState.Normal;
             }
 
-            Progress = elapsedTime;
+            _progress = elapsedTime;
             UpdateTaskbar();
         }
-
         private void btnStart_Click(object sender, EventArgs e)
         {
-            State = TaskbarProgressBarState.Normal;
-            Progress = 0;
+            StartPomodoro();
+            UpdateTaskbar();
+        }
+        private void btnReset_Click(object sender, EventArgs e)
+        {
+            ResetPomodoro();
+            UpdateTaskbar();
+    }
+        private void UpdateTaskbar()
+        {
+            var taskbar = Microsoft.WindowsAPICodePack.Taskbar.TaskbarManager.Instance;
+            taskbar.SetProgressState(_state);
+            taskbar.SetProgressValue((int)(_progress/ TIMER_INTERVAL_IN_TICKS), (int)(WORK_INTERVAL/ TIMER_INTERVAL_IN_TICKS));
+        }
 
-            _startTime = DateTime.Now.Ticks;
+        private void StartPomodoro()
+        {
             _pomodoroTimer.Start();
 
-            UpdateTaskbar();
+            _state = TaskbarProgressBarState.Normal;
+            _progress = 0;
+            _startTime = DateTime.Now.Ticks;
 
             lblStatusText.Text = "Running";
         }
 
-        private void btnReset_Click(object sender, EventArgs e)
+        private void CompletePomodoro()
         {
-            State = TaskbarProgressBarState.Normal;
-            UpdateTaskbar();
+            _pomodoroTimer.Stop();
+
+            _state = TaskbarProgressBarState.Error;
+            _completed++;
+            
+            lblCompletedCount.Text = _completed.ToString();
+            lblStatusText.Text = "Finished";
         }
 
-        private void UpdateTaskbar()
+        private void ResetPomodoro()
         {
-            var taskbar = Microsoft.WindowsAPICodePack.Taskbar.TaskbarManager.Instance;
-            taskbar.SetProgressState(State);
-            taskbar.SetProgressValue((int)(Progress/ TIMER_INTERVAL_IN_TICKS), (int)(WORK_INTERVAL/ TIMER_INTERVAL_IN_TICKS));
+            _pomodoroTimer.Stop();
+
+            _state = TaskbarProgressBarState.Normal;
+            _progress = 0;
+
+            lblStatusText.Text = "Reset";
         }
     }
 }
