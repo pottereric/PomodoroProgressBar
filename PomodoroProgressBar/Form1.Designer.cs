@@ -60,7 +60,7 @@ namespace PomodoroProgressBar
             // lblStatus
             // 
             this.lblStatus.AutoSize = true;
-            this.lblStatus.Location = new System.Drawing.Point(186, 19);
+            this.lblStatus.Location = new System.Drawing.Point(174, 19);
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(83, 32);
             this.lblStatus.TabIndex = 2;
@@ -69,7 +69,7 @@ namespace PomodoroProgressBar
             // lblCompleted
             // 
             this.lblCompleted.AutoSize = true;
-            this.lblCompleted.Location = new System.Drawing.Point(186, 80);
+            this.lblCompleted.Location = new System.Drawing.Point(174, 80);
             this.lblCompleted.Name = "lblCompleted";
             this.lblCompleted.Size = new System.Drawing.Size(137, 32);
             this.lblCompleted.TabIndex = 3;
@@ -78,7 +78,7 @@ namespace PomodoroProgressBar
             // lblStatusText
             // 
             this.lblStatusText.AutoSize = true;
-            this.lblStatusText.Location = new System.Drawing.Point(362, 19);
+            this.lblStatusText.Location = new System.Drawing.Point(310, 19);
             this.lblStatusText.Name = "lblStatusText";
             this.lblStatusText.Size = new System.Drawing.Size(0, 32);
             this.lblStatusText.TabIndex = 4;
@@ -86,7 +86,7 @@ namespace PomodoroProgressBar
             // lblCompletedCount
             // 
             this.lblCompletedCount.AutoSize = true;
-            this.lblCompletedCount.Location = new System.Drawing.Point(362, 80);
+            this.lblCompletedCount.Location = new System.Drawing.Point(310, 80);
             this.lblCompletedCount.Name = "lblCompletedCount";
             this.lblCompletedCount.Size = new System.Drawing.Size(27, 32);
             this.lblCompletedCount.TabIndex = 5;
