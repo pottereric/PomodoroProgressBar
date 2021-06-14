@@ -29,6 +29,7 @@ namespace PomodoroProgressBar
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.btnStart = new System.Windows.Forms.Button();
             this.btnReset = new System.Windows.Forms.Button();
             this.lblStatus = new System.Windows.Forms.Label();
@@ -103,7 +104,7 @@ namespace PomodoroProgressBar
             this.Controls.Add(this.lblStatus);
             this.Controls.Add(this.btnReset);
             this.Controls.Add(this.btnStart);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
